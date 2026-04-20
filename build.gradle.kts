@@ -1,9 +1,9 @@
 plugins {
-	id("idea")
+	idea
 	java
-	id("org.springframework.boot") version "4.0.3"
-	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.algaworks.algashop"
@@ -27,43 +27,43 @@ repositories {
 	mavenCentral()
 }
 
-val mapstructVersion = "1.6.3"
-
 dependencies {
-	implementation("com.fasterxml.uuid:java-uuid-generator:5.2.0")
-	implementation("commons-validator:commons-validator:1.10.1")
-	implementation("org.apache.commons:commons-lang3:3.20.0")
-	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("org.springframework.boot:spring-boot-starter-flyway")
+	// IMPLEMENTATION
+	implementation(libs.java.uuid.generator)
+	implementation(libs.commons.validator)
+	implementation(libs.commons.lang3)
+	implementation(libs.mapstruct)
+	implementation(libs.spring.boot.starter.data.jpa)
+	implementation(libs.spring.boot.starter.webmvc)
+	implementation(libs.spring.boot.starter.flyway)
+	implementation(libs.flyway.database.postgresql)
 
-	implementation("org.flywaydb:flyway-database-postgresql")
+	// COMPILE ONLY & RUNTIME ONLY
+	compileOnly(libs.lombok)
+	runtimeOnly(libs.postgresql)
 
-	compileOnly("org.projectlombok:lombok")
+	// ANNOTATION PROCESSOR
+	annotationProcessor(libs.mapstruct.processor)
+	annotationProcessor(libs.lombok)
+	annotationProcessor(libs.lombok.mapstruct.binding)
+	annotationProcessor(libs.hibernate.processor)
 
-	runtimeOnly("org.postgresql:postgresql")
+	// TEST COMPILE & ANNOTATION PROCESSOR
+	testCompileOnly(libs.lombok)
+	testAnnotationProcessor(libs.lombok)
 
-	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
-	annotationProcessor("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-	annotationProcessor("org.hibernate.orm:hibernate-processor")
+	// TEST IMPLEMENTATION
+	testImplementation(libs.spring.boot.starter.flyway.test)
+	testImplementation(libs.datafaker)
+	testImplementation(libs.assertj.core)
+	testImplementation(libs.spring.boot.starter.data.jpa.test)
+	testImplementation(libs.spring.boot.starter.webmvc.test)
 
-	testCompileOnly("org.projectlombok:lombok")
-
-	testAnnotationProcessor("org.projectlombok:lombok")
-
-	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
-	testImplementation("net.datafaker:datafaker:2.5.4")
-	testImplementation("org.assertj:assertj-core:3.27.7")
-	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-
-	mockitoAgent("org.mockito:mockito-core"){
+	// MOCKITO AGENT & RUNTIME
+	mockitoAgent(libs.mockito.core) {
 		isTransitive = false
 	}
-
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test> {
