@@ -10,7 +10,7 @@ public abstract class AbstractApplicationTest {
 
     protected final CustomFaker customFaker = CustomFaker.getInstance();
     protected final JdbcTemplate jdbcTemplate;
-    private final String[] TABLES = {"CREDIT_CARDS", "INVOIVE_LINES_ITEMS", "INVOICES", "PAYMENT_SETTINGS"};
+    private final String[] TABLES = {"CREDIT_CARDS", "INVOICE_LINE_ITEMS", "INVOICES", "PAYMENT_SETTINGS"};
 
     public AbstractApplicationTest(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

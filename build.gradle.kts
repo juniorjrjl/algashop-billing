@@ -34,13 +34,15 @@ dependencies {
 	implementation("commons-validator:commons-validator:1.10.1")
 	implementation("org.apache.commons:commons-lang3:3.20.0")
 	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-	implementation("org.springframework.boot:spring-boot-h2console")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
+
+	implementation("org.flywaydb:flyway-database-postgresql")
 
 	compileOnly("org.projectlombok:lombok")
 
-	runtimeOnly("com.h2database:h2")
+	runtimeOnly("org.postgresql:postgresql")
 
 	annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 	annotationProcessor("org.projectlombok:lombok")
@@ -51,6 +53,7 @@ dependencies {
 
 	testAnnotationProcessor("org.projectlombok:lombok")
 
+	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
 	testImplementation("net.datafaker:datafaker:2.5.4")
 	testImplementation("org.assertj:assertj-core:3.27.7")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")

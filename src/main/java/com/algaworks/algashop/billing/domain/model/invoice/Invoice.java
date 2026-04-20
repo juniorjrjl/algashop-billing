@@ -6,6 +6,7 @@ import com.algaworks.algashop.billing.domain.model.IdGenerator;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -62,7 +63,7 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
     @OneToOne(cascade = ALL)
     private PaymentSettings paymentSettings;
     @ElementCollection
-    @CollectionTable(name = "INVOIVE_LINES_ITEMS", joinColumns = @JoinColumn(name = "invoice_id"))
+    @CollectionTable(name = "INVOICE_LINE_ITEMS", joinColumns = @JoinColumn(name = "invoice_id"))
     private Set<LineItem> items = new HashSet<>();
     @Embedded
     private Payer payer;
