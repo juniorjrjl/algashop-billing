@@ -24,6 +24,7 @@ mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstr
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc" }
 spring-boot-starter-flyway = { group = "org.springframework.boot", name = "spring-boot-starter-flyway" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
 
 # --- COMPILE ONLY & RUNTIME ONLY ---

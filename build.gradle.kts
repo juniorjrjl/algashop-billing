@@ -16,7 +16,7 @@ java {
 	}
 }
 
-val mockitoAgent: Configuration = configurations.create("mockitoAgent")
+val mockitoAgent = configurations.create("mockitoAgent")
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -36,6 +36,7 @@ dependencies {
 	implementation(libs.spring.boot.starter.data.jpa)
 	implementation(libs.spring.boot.starter.webmvc)
 	implementation(libs.spring.boot.starter.flyway)
+	implementation(libs.spring.boot.starter.validation)
 	implementation(libs.flyway.database.postgresql)
 
 	// COMPILE ONLY & RUNTIME ONLY
