@@ -1,5 +1,5 @@
 [versions]
-springBoot = "4.0.5"
+springBoot = "4.0.6"
 springDependencyManagement = "1.1.7"
 mapstruct = "1.6.3"
 java-uuid = "5.2.0"
@@ -25,6 +25,7 @@ spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spr
 spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc" }
 spring-boot-starter-flyway = { group = "org.springframework.boot", name = "spring-boot-starter-flyway" }
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-boot-starter-restclient = {group = "org.springframework.boot", name = "spring-boot-starter-restclient" }
 flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
 
 # --- COMPILE ONLY & RUNTIME ONLY ---

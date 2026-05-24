@@ -37,6 +37,7 @@ dependencies {
 	implementation(libs.spring.boot.starter.webmvc)
 	implementation(libs.spring.boot.starter.flyway)
 	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.spring.boot.starter.restclient)
 	implementation(libs.flyway.database.postgresql)
 
 	// COMPILE ONLY & RUNTIME ONLY
@@ -51,6 +52,7 @@ dependencies {
 
 	// TEST COMPILE & ANNOTATION PROCESSOR
 	testCompileOnly(libs.lombok)
+
 	testAnnotationProcessor(libs.lombok)
 
 	// TEST IMPLEMENTATION
@@ -69,11 +71,16 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
+	finalizedBy(tasks.jacocoTestReport)
+	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
 tasks.register<Test>("integrationTest"){
 	description = "Run unit tests."
 	group = "verification"
+
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 
 	testClassesDirs = tasks.test.get().testClassesDirs
 	classpath = tasks.test.get().classpath
@@ -81,6 +88,7 @@ tasks.register<Test>("integrationTest"){
 	useJUnitPlatform{
 		includeTags("IntegrationTest")
 	}
+	finalizedBy(tasks.jacocoTestReport)
 	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
@@ -88,12 +96,15 @@ tasks.register<Test>("unitTest"){
 	description = "Run unit tests."
 	group = "verification"
 
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
+
 	testClassesDirs = tasks.test.get().testClassesDirs
 	classpath = tasks.test.get().classpath
 
 	useJUnitPlatform{
 		includeTags("UnitTest")
 	}
+	finalizedBy(tasks.jacocoTestReport)
 	systemProperty("test.seed", System.getProperty("test.seed") ?: "")
 }
 
