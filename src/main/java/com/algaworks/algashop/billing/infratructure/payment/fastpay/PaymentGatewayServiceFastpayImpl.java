@@ -5,6 +5,7 @@ import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardReposito
 import com.algaworks.algashop.billing.domain.model.invoice.payment.Payment;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentGatewayService;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentRequest;
+import com.algaworks.algashop.billing.infratructure.payment.AlgashopPaymentProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
 
     private final FastpayPaymentAPIClient fastpayPaymentAPIClient;
     private final CreditCardRepository creditCardRepository;
+    private final AlgashopPaymentProperties algashopPaymentProperties;
 
     @Override
     public Payment capture(final PaymentRequest request) {
@@ -48,7 +50,7 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
                 .zipCode(address.getZipCode())
                 .addressLine1(address.getStreet() + ", " + address.getNumber())
                 .addressLine2(address.getComplement())
-                .replyToUrl("http://example.com/payments");
+                .replyToUrl(algashopPaymentProperties.fastpay().webhookUrl());
         switch (request.getPaymentMethod()){
             case CREDIT_CARD -> {
                 builder.method(CREDIT.name());
@@ -80,8 +82,8 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
             throw new IllegalStateException("Unknown Payment status: " + response.getStatus());
         }
         return builder
-                .status(FastPayEnumConverter.convert(fastpayPaymentStatus))
-                .method(FastPayEnumConverter.convert(fastpayPaymentMethod))
+                .status(FastpayEnumConverter.convert(fastpayPaymentStatus))
+                .method(FastpayEnumConverter.convert(fastpayPaymentMethod))
                 .build();
     }
 

@@ -3,6 +3,7 @@ package com.algaworks.algashop.billing.domain.model.invoice;
 import com.algaworks.algashop.billing.domain.model.AbstractAuditableAggregateRoot;
 import com.algaworks.algashop.billing.domain.model.DomainException;
 import com.algaworks.algashop.billing.domain.model.IdGenerator;
+import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
@@ -31,6 +32,8 @@ import java.util.UUID;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.CANCELED;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.PAID;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.UNPAID;
+import static com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus.FAILED;
+import static com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus.REFUNDED;
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
 import static java.util.Objects.isNull;
@@ -200,5 +203,13 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void updatePaymentStatus(final PaymentStatus status) {
+        switch (status) {
+            case FAILED -> cancel("Payment failed");
+            case REFUNDED -> cancel("Payment refunded");
+            case PAID -> markAsPaid();
+        }
     }
 }

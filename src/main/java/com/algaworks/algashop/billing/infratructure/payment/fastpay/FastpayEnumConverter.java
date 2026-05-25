@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class FastPayEnumConverter {
+public class FastpayEnumConverter {
 
     public static PaymentMethod convert(final FastpayPaymentMethod method){
         return switch (method){

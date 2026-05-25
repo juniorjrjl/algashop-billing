@@ -7,6 +7,7 @@ import com.algaworks.algashop.billing.domain.model.invoice.InvoiceRepository;
 import com.algaworks.algashop.billing.domain.model.invoice.InvoicingService;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.Payment;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentGatewayService;
+import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
@@ -56,6 +57,13 @@ public class InvoiceManagementApplicationService {
             return;
         }
         service.assignPayment(domain, payment);
+        repository.saveAndFlush(domain);
+    }
+
+    @Transactional
+    public void updatePaymentStatus(final UUID invoiceId, final PaymentStatus paymentStatus) {
+        final var domain = repository.findById(invoiceId).orElseThrow(InvoiceNotFoundException::new);
+        domain.updatePaymentStatus(paymentStatus);
         repository.saveAndFlush(domain);
     }
 

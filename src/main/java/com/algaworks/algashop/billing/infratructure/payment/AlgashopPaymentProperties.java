@@ -24,7 +24,9 @@ public record AlgashopPaymentProperties(
             @NotBlank
             String hostname,
             @NotBlank
-            String privateToken
+            String privateToken,
+            @NotBlank
+            String webhookUrl
 
     ){}
 
