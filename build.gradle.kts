@@ -61,6 +61,7 @@ dependencies {
 	testImplementation(libs.assertj.core)
 	testImplementation(libs.spring.boot.starter.data.jpa.test)
 	testImplementation(libs.spring.boot.starter.webmvc.test)
+	testImplementation(libs.wiremock.spring.boot)
 
 	// MOCKITO AGENT & RUNTIME
 	mockitoAgent(libs.mockito.core) {

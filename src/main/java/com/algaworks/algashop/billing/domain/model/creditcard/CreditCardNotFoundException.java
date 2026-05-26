@@ -1,6 +1,6 @@
 package com.algaworks.algashop.billing.domain.model.creditcard;
 
-import com.algaworks.algashop.billing.domain.model.DomainException;
+import com.algaworks.algashop.billing.domain.model.DomainNotFoundException;
 
-public class CreditCardNotFoundException extends DomainException {
+public class CreditCardNotFoundException extends DomainNotFoundException {
 }

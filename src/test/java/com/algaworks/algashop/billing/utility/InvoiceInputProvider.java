@@ -20,7 +20,8 @@ public class InvoiceInputProvider extends AbstractProvider<CustomFaker> {
     public LineItemInput lineItem() {
         return new LineItemInput(
                 faker.boardgame().name(),
-                faker.numeric().valueBetween(5, 30)
+                faker.numeric().valueBetween(5, 30),
+                faker.number().randomDigitNotZero()
         );
     }
 

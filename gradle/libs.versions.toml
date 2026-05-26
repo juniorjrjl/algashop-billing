@@ -9,6 +9,7 @@ postgresql = "42.7.2"
 datafaker = "2.5.4"
 assertj = "3.27.7"
 lombok-mapstruct = "0.2.0"
+wiremock-spring = "4.0.9"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
@@ -43,6 +44,7 @@ datafaker = { group = "net.datafaker", name = "datafaker", version.ref = "datafa
 assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 spring-boot-starter-data-jpa-test = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa-test" }
 spring-boot-starter-webmvc-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test" }
+wiremock-spring-boot = { group = "org.wiremock.integrations", name = "wiremock-spring-boot", version.ref = "wiremock-spring" }
 
 # --- TEST RUNTIME & AGENTS ---
 mockito-core = { group = "org.mockito", name = "mockito-core" }
