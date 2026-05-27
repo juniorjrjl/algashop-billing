@@ -120,3 +120,23 @@ tasks.jacocoTestReport {
 tasks.bootJar {
 	archiveFileName.set("billing.jar")
 }
+
+tasks.register<Exec>("dockerbuild"){
+	description = "Builds a multi-platform Docker image using Buildx"
+	group = "build"
+
+	dependsOn("bootJar")
+
+	workingDir = project.rootDir
+
+	commandLine(
+		"docker",
+		"buildx",
+		"build",
+		"--platform",
+		"linux/arm64/v8,linux/amd64",
+		"--tag",
+		"algashop/billing:dev",
+		"."
+	)
+}
