@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://algashop-postgres:5432/billing
+  flyway:
+    url: jdbc:postgresql://algashop-postgres:5432/billing
+algashop:
+  integrations:
+    payment:
+      fastpay:
+        hostname: http://localhost:9995

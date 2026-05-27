@@ -116,3 +116,7 @@ tasks.jacocoTestReport {
 		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
 	}
 }
+
+tasks.bootJar {
+	archiveFileName.set("billing.jar")
+}
