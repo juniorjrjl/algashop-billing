@@ -7,7 +7,6 @@ import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -32,8 +31,6 @@ import java.util.UUID;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.CANCELED;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.PAID;
 import static com.algaworks.algashop.billing.domain.model.invoice.InvoiceStatus.UNPAID;
-import static com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus.FAILED;
-import static com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus.REFUNDED;
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
 import static java.util.Objects.isNull;
@@ -58,6 +55,7 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
     private OffsetDateTime paidAt;
     @Nullable
     private OffsetDateTime canceledAt;
+    @Nullable
     private OffsetDateTime expiresAt;
     private BigDecimal totalAmount;
     @Enumerated(STRING)
@@ -119,6 +117,7 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
         }
         setPaidAt(OffsetDateTime.now());
         setInvoiceStatus(PAID);
+        setExpiresAt(null);
         final var event = new InvoicePaidEvent(
                 this.getId(),
                 this.getCustomerId(),
@@ -139,6 +138,7 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
         setCancelReason(cancelReason);
         setCanceledAt(OffsetDateTime.now());
         setInvoiceStatus(CANCELED);
+        setExpiresAt(null);
         final var event = new InvoiceCanceledEvent(
                 this.getId(),
                 this.getCustomerId(),
