@@ -6,10 +6,8 @@ import com.algaworks.algashop.billing.infratructure.creditcard.fastpay.FastpayCr
 import com.algaworks.algashop.billing.infratructure.creditcard.fastpay.FastpayCreditCardTokenizationAPIClientConfig;
 import com.algaworks.algashop.billing.infratructure.creditcard.fastpay.FastpayTokenizationRequest;
 import com.algaworks.algashop.billing.utility.CustomFaker;
-import com.algaworks.algashop.billing.utility.extension.WireMockExtension;
 import com.algaworks.algashop.billing.utility.tag.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
@@ -19,7 +17,6 @@ import java.util.UUID;
 @IntegrationTest
 @SpringBootTest
 @Import({FastpayCreditCardTokenizationAPIClientConfig.class})
-@ExtendWith(WireMockExtension.class)
 public abstract class AbstractFastpayTest {
 
     protected static final CustomFaker customFaker = CustomFaker.getInstance();

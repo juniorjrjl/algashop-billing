@@ -3,7 +3,6 @@ package com.algaworks.algashop.billing.infratructure.creditcard.fastpay;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardProviderService;
 import com.algaworks.algashop.billing.domain.model.creditcard.LimitedCreditCard;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 
 @Service
-@ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
 @RequiredArgsConstructor
 public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderService {
 

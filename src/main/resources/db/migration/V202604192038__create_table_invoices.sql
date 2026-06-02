@@ -1,4 +1,4 @@
-create table public.invoices (
+create table invoices (
     id uuid not null primary key,
     created_at timestamp(6) with time zone,
     created_by_user_id uuid,
@@ -28,18 +28,18 @@ create table public.invoices (
     payment_settings_id uuid
 );
 
-create index idx_invoice_customer_id on public.invoices (customer_id);
-create index idx_invoice_order_id on public.invoices (order_id);
-create unique index idx_invoice_payment_settings_id on public.invoices (payment_settings_id);
+create index idx_invoice_customer_id on invoices (customer_id);
+create index idx_invoice_order_id on invoices (order_id);
+create unique index idx_invoice_payment_settings_id on invoices (payment_settings_id);
 
-alter table public.invoices add constraint fk_invoice_payment_settings_id foreign key (payment_settings_id) references public.payment_settings(id);
+alter table invoices add constraint fk_invoice_payment_settings_id foreign key (payment_settings_id) references payment_settings(id);
 
-create table public.invoice_line_items (
+create table invoice_line_items (
     invoice_id uuid not null,
     "items_amount" numeric(38,2),
     "items_name" varchar(255),
     "items_number" integer
 );
 
-create index idx_invoice_line_item_invoice_id on public.invoice_line_items (invoice_id);
-alter table public.invoice_line_items add constraint fk_invoice_line_item_invoice_id foreign key (invoice_id) references public.invoices(id);
+create index idx_invoice_line_item_invoice_id on invoice_line_items (invoice_id);
+alter table invoice_line_items add constraint fk_invoice_line_item_invoice_id foreign key (invoice_id) references invoices(id);

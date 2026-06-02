@@ -9,7 +9,6 @@ import com.algaworks.algashop.billing.infratructure.payment.AlgashopPaymentPrope
 import com.algaworks.algashop.billing.presentation.BadGatewayException;
 import com.algaworks.algashop.billing.presentation.GatewayTimeoutException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -21,7 +20,6 @@ import static com.algaworks.algashop.billing.infratructure.payment.fastpay.Fastp
 import static java.util.Objects.requireNonNull;
 
 @Service
-@ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
 @RequiredArgsConstructor
 public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
 

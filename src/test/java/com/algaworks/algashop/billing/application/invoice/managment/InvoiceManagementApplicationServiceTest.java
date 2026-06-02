@@ -11,19 +11,25 @@ import com.algaworks.algashop.billing.domain.model.invoice.PaymentMethod;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentGatewayService;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentRequest;
 import com.algaworks.algashop.billing.infratructure.listener.InvoiceEventListener;
-import com.algaworks.algashop.billing.utility.AbstractApplicationTest;
+import com.algaworks.algashop.billing.utility.CustomFaker;
 import com.algaworks.algashop.billing.utility.InvoiceDataBuilder;
 import com.algaworks.algashop.billing.utility.databuilder.application.GenerateInvoiceInputDataBuilder;
 import com.algaworks.algashop.billing.utility.databuilder.domain.CreditCardDataBuilder;
+import com.algaworks.algashop.billing.utility.extension.PGContainer;
+import com.algaworks.algashop.billing.utility.extension.PostgreSQLTestContainerExtension;
+import com.algaworks.algashop.billing.utility.tag.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import static com.algaworks.algashop.billing.domain.model.invoice.PaymentMethod.CREDIT_CARD;
 import static com.algaworks.algashop.billing.domain.model.invoice.PaymentMethod.GATEWAY_BALANCE;
@@ -35,13 +41,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles("test")
+@IntegrationTest
 @SpringBootTest
 @Transactional
-class InvoiceManagementApplicationServiceTest extends AbstractApplicationTest {
+@ExtendWith(PostgreSQLTestContainerExtension.class)
+class InvoiceManagementApplicationServiceTest {
+
+    private static final CustomFaker customFaker = CustomFaker.getInstance();
 
     private final InvoiceManagementApplicationService applicationService;
     private final InvoiceRepository invoiceRepository;
     private final CreditCardRepository creditCardRepository;
+
+    @PGContainer
+    private static PostgreSQLContainer postgreSQLContainer;
 
     @MockitoSpyBean
     private InvoicingService invoicingService;
@@ -53,14 +67,28 @@ class InvoiceManagementApplicationServiceTest extends AbstractApplicationTest {
     private InvoiceEventListener eventListener;
 
     @Autowired
-    public InvoiceManagementApplicationServiceTest(final JdbcTemplate jdbcTemplate,
-                                                   final InvoiceManagementApplicationService applicationService,
+    public InvoiceManagementApplicationServiceTest(final InvoiceManagementApplicationService applicationService,
                                                    final InvoiceRepository invoiceRepository,
                                                    final CreditCardRepository creditCardRepository) {
-        super(jdbcTemplate);
         this.applicationService = applicationService;
         this.invoiceRepository = invoiceRepository;
         this.creditCardRepository = creditCardRepository;
+    }
+
+    @DynamicPropertySource
+    public static void configurePropertySource(final DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
+        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
+    }
+
+
+    @BeforeEach
+    void setUp() {
+        customFaker.reseed();
     }
 
     @Test
@@ -131,8 +159,10 @@ class InvoiceManagementApplicationServiceTest extends AbstractApplicationTest {
 
     @Test
     void shouldProcessInvoicePayment(){
+        final var creditCard = CreditCardDataBuilder.builder().build();
+        creditCardRepository.save(creditCard);
         final var invoice = InvoiceDataBuilder.builder().buildIssue();
-        invoice.changePaymentSettings(customFaker.option(PaymentMethod.class), UUID.randomUUID());
+        invoice.changePaymentSettings(customFaker.option(PaymentMethod.class), creditCard.getId());
         final var payment = customFaker.invoiceInput()
                 .payment()
                 .toBuilder()
@@ -140,7 +170,7 @@ class InvoiceManagementApplicationServiceTest extends AbstractApplicationTest {
                 .invoiceId(invoice.getId())
                 .method(invoice.getPaymentSettings().getPaymentMethod())
                 .build();
-        invoiceRepository.save(invoice);
+        invoiceRepository.saveAndFlush(invoice);
         when(paymentGatewayService.capture(any(PaymentRequest.class))).thenReturn(payment);
         applicationService.processPayment(invoice.getId());
         final var actual = invoiceRepository.findById(invoice.getId()).orElseThrow();

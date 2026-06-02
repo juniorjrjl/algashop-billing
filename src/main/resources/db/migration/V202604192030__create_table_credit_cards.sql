@@ -1,4 +1,4 @@
-create table public.credit_cards (
+create table credit_cards (
     id uuid not null primary key,
     brand varchar(255),
     created_at timestamp(6) with time zone,
@@ -9,4 +9,4 @@ create table public.credit_cards (
     last_numbers varchar(255)
 );
 
-create index idx_credit_card_customer_id on public.credit_cards (customer_id);
+create index idx_credit_card_customer_id on credit_cards (customer_id);

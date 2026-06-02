@@ -9,15 +9,8 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public record AlgashopPaymentProperties(
         @NotNull
-        AlgashopPaymentProvider provider,
-        @NotNull
         FastPayProperties fastpay
 ) {
-
-    public enum AlgashopPaymentProvider {
-        FAKE,
-        FASTPAY
-    }
 
     @Validated
     public record FastPayProperties(
