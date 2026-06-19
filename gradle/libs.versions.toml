@@ -6,10 +6,10 @@ datafaker = "2.5.4"
 java-uuid = "5.2.0"
 lombok-mapstruct = "0.2.0"
 mapstruct = "1.6.3"
-postgresql = "42.7.2"
-springBoot = "4.0.6"
+postgresql = "42.7.11"
+springBoot = "4.1.0"
 springDependencyManagement = "1.1.7"
-wiremock-spring = "4.0.9"
+wiremock-spring = "4.2.1"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
